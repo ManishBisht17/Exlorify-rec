@@ -1,17 +1,20 @@
+/* eslint-disable */
+import '@babel/polyfill';
 import { displayMap } from './mapbox';
-import { login, signup, logout } from '../../../../../../../OneDrive/Documents/Desktop/Natours Project/natours/public/js/auth';
-import { updateSettings } from '../../../../../../../OneDrive/Documents/Desktop/Natours Project/natours/public/js/updateSettings';
-import { bookTour } from '../../../../../../../OneDrive/Documents/Desktop/Natours Project/natours/public/js/stripe';
-import { showAlert } from '../../../../../../../OneDrive/Documents/Desktop/Natours Project/natours/public/js/alerts';
+import { login, logout } from './login';
+import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
+import { showAlert } from './alerts';
+
+
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
-const signupForm = document.querySelector('.form--signup');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
-const tourBookingBtn = document.getElementById('book-tour');
+const bookBtn = document.getElementById('book-tour');
 
 // DELEGATION
 if (mapBox) {
@@ -19,38 +22,19 @@ if (mapBox) {
   displayMap(locations);
 }
 
-if (loginForm) {
-  // Getting email and password from "/login" form
-  loginForm.addEventListener('submit', (e) => {
+if (loginForm)
+  loginForm.addEventListener('submit', e => {
     e.preventDefault();
-
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-
     login(email, password);
   });
-}
-
-if (signupForm) {
-  // Getting name, email and password from "/signup" form
-  signupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const passwordConfirm = document.getElementById('password-confirm').value;
-
-    signup(name, email, password, passwordConfirm);
-  });
-}
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
-if (userDataForm) {
-  userDataForm.addEventListener('submit', (e) => {
+if (userDataForm)
+  userDataForm.addEventListener('submit', e => {
     e.preventDefault();
-
     const form = new FormData();
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
@@ -58,18 +42,15 @@ if (userDataForm) {
 
     updateSettings(form, 'data');
   });
-}
 
-if (userPasswordForm) {
-  userPasswordForm.addEventListener('submit', async (e) => {
+if (userPasswordForm)
+  userPasswordForm.addEventListener('submit', async e => {
     e.preventDefault();
-
     document.querySelector('.btn--save-password').textContent = 'Updating...';
 
     const passwordCurrent = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-
     await updateSettings(
       { passwordCurrent, password, passwordConfirm },
       'password'
@@ -80,15 +61,13 @@ if (userPasswordForm) {
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
   });
-}
 
-if (tourBookingBtn) {
-  tourBookingBtn.addEventListener('click', (e) => {
+if (bookBtn)
+  bookBtn.addEventListener('click', e => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
-}
 
 const alertMessage = document.querySelector('body').dataset.alert;
-if (alertMessage) showAlert('success', alertMessage, 10);
+if (alertMessage) showAlert('success', alertMessage, 20);

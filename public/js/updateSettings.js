@@ -22,6 +22,8 @@ export const updateSettings = async (data, type) => {
       showAlert('success', `${type.toUpperCase()} updated successfully!`);
     }
   } catch (error) {
-    showAlert('error', error.response.data.message);
+    // Check if error.response is available
+    const message = error.response?.data?.message || 'An error occurred. Please try again.';
+    showAlert('error', message);
   }
 };
